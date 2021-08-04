@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/template.xhtml">
+	
+	
+	<ui:define name="cabecalho">
+		<ui:include src="/template/cabecalho.xhtml" />
+	</ui:define>
+	
+	<ui:define name="menu_esquerdo">
+		<ui:include src="/template/menu_esquerdo.xhtml" />
+	</ui:define>
+	
+	<ui:define name="conteudo">
+	
+		 <h:form id="form">
+	        <p:dataTable id="tblPessoas" var="item" value="#{Pag_Item.novaListaItens}"
+	         paginator="true" rows="15" emptyMessage="Nenhum registro foi encontrado!">
+	         
+	         	<f:facet name="header">
+                	Lista de Compras de Item
+            	</f:facet>
+	         
+	           
+	             
+	            <p:column headerText="produto id">
+	                <h:outputText value="#{item.produto_id}" />
+	            </p:column>
+	            
+	            
+	            
+	            <p:column headerText="codigo pedido">
+	                <h:outputText value="#{item.pedido_codigoPe}" />
+	            </p:column>
+	            
+	           
+	           
+	            
+	            <p:column headerText="Quantidade">
+	                <h:outputText value="#{item.qtd}" />
+	            </p:column>
+	            
+	           
+	            
+	            <p:column headerText="Nome">
+	                <h:outputText value="#{item.nome}" />
+	            </p:column>
+	            
+	           
+	            
+	            
+<!-- 	            <p:column headerText="Endereços"> -->
+<!-- 	                <p:dataList var="end" value="#{pessoa.enderecos}"  -->
+<!-- 	                	emptyMessage="Não tem endereços cadastrados!" > -->
+<!-- 	                	#{end} -->
+<!-- 	                </p:dataList> -->
+<!-- 	            </p:column> -->
+	            
+	            <p:column headerText="opções">
+			        <p:commandButton icon="pi pi-pencil" actionListener="#{Pag_Item.PrepararEditar}"  
+			        	onclick="PF('dlgEditarPessoa').show()"
+			        	update=":fEditar:pgEditar"/>
+			        	
+			        <p:commandButton icon="ui-icon-trash" actionListener="#{Pag_Item.PrepararDeletar}"
+			        	onclick="PF('dlgDeletarPessoa').show()"
+			        	update=":fDeletar:pgDeletar"/>
+			        	
+			    </p:column>
+	            
+	        </p:dataTable>
+	        
+	        <p:commandButton icon="pi pi-user-plus" value="Adcionar" actionListener="#{Pag_Item.PrepararCadastrar}"
+			        	onclick="PF('dlgCadastrarPessoa').show()"
+			        	update=":fCadastrar:pgCadastrar"/>
+	     </h:form>
+	     
+	     <p:dialog header="Adiconar itens de compra no carrinho" widgetVar="dlgCadastrarPessoa" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+			
+			<h:form id="fCadastrar">
+				<p:outputPanel id="pgCadastrar" style="text-align:center;">
+					<p:panelGrid columns="2">
+					
+					    <p:outputLabel value="Produto id" />
+						<p:inputText value="#{Pag_Item.item.produto_id}"/>
+						
+						<p:outputLabel value="codigo Pedido" />
+						<p:inputText value="#{Pag_Item.item.pedido_codigoPe}"/>
+						
+					
+					
+						<p:outputLabel value="Quantidade" />
+						<p:inputText value="#{Pag_Item.item.qtd}"/>
+						
+						
+						<p:outputLabel value="Nome" />
+						<p:inputText value="#{Pag_Item.item.nome}"/>
+						
+					
+					</p:panelGrid>
+					
+					<p:panelGrid columns="2">
+					
+						<p:commandButton value="Confirmar" actionListener="#{Pag_Item.Cadastrar}"
+							oncomplete="PF('dlgCadastrarPessoa').hide()"
+							update=":form:tblPessoas :msgGlobal" />
+						
+						<p:commandButton value="Cancelar" actionListener="#{Pag_Item.Clear}" 
+							oncomplete="PF('dlgCadastrarPessoa').hide()"
+							update=":fCadastrar:pgCadastrar"/>
+					
+					</p:panelGrid>
+				</p:outputPanel>
+			</h:form>
+		</p:dialog>
+	     
+	    <p:dialog header="editar itens de compra " widgetVar="dlgEditarPessoa" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+			
+			<h:form id="fEditar">
+				<p:outputPanel id="pgEditar" style="text-align:center;">
+					<p:panelGrid columns="2">
+				
+				
+				       <p:outputLabel value="Produto id" />
+						<p:inputText value="#{Pag_Item.item.produto_id}"  disabled="true"   />
+						
+						<p:outputLabel value="codigo Pedido" />
+						<p:inputText value="#{Pag_Item.item.pedido_codigoPe}"  disabled="true"/>
+						
+				
+				
+				
+						<p:outputLabel value="Quantidade" />
+						<p:inputText value="#{Pag_Item.item.qtd}"/>
+					
+					
+						<p:outputLabel value="Nome" />
+						<p:inputText value="#{Pag_Item.item.nome}"/>
+						
+					
+						<p:outputLabel value="Produto Padrão" />
+						
+						<p:selectOneMenu id="selEndereco" value="#{Pag_Item.item.produto_padrao}"
+							converter="produtoConverter">
+				            
+				            <f:selectItems value="#{Pag_Item.item.produtos}"
+				                 var="end" itemLabel="#{end}" itemValue="#{end}" />
+				        </p:selectOneMenu>
+						
+					</p:panelGrid>
+					
+					<p:panelGrid columns="2">
+					
+						<p:commandButton value="Confirmar" actionListener="#{Pag_Item.Update}"
+							oncomplete="PF('dlgEditarPessoa').hide()"
+							update=":form:tblPessoas :msgGlobal" />
+						
+						<p:commandButton value="Cancelar" actionListener="#{Pag_Item.Clear}" 
+							oncomplete="PF('dlgEditarPessoa').hide()"
+							update=":fEditar:pgEditar"/>
+					
+					</p:panelGrid>
+				</p:outputPanel>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog header=" Deleta compra no carrinho" widgetVar="dlgDeletarPessoa" modal="true"
+			showEffect="blind" hideEffect="explode" resizable="false" appendTo="@(body)">
+			
+			<h:form id="fDeletar">
+				<p:outputPanel id="pgDeletar" style="text-align:center;">
+					<p:panelGrid columns="2">
+					
+					
+					    <p:outputLabel value="Produto id" />
+						<p:inputText value="#{Pag_Item.item.produto_id}"   disabled="true"  />
+						
+						<p:outputLabel value="codigo Pedido" />
+						<p:inputText value="#{Pag_Item.item.pedido_codigoPe}"    disabled="true"/>
+						
+					
+					
+					
+						<p:outputLabel value="Quantidade" />
+						<p:inputText value="#{Pag_Item.item.qtd}" disabled="true"/>
+					
+						
+						<p:outputLabel value="Nome" />
+						<p:inputText value="#{Pag_Item.item.nome}" />
+						
+					
+					</p:panelGrid>
+					
+					<p:panelGrid columns="2">
+					
+						<p:commandButton value="Confirmar" actionListener="#{Pag_Item.Deletar}"
+							oncomplete="PF('dlgDeletarPessoa').hide()"
+							update=":form:tblPessoas :msgGlobal" />
+						
+						<p:commandButton value="Cancelar" 
+							oncomplete="PF('dlgDeletarPessoa').hide()" />
+					
+					</p:panelGrid>
+				</p:outputPanel>
+			</h:form>
+		</p:dialog>
+	        
+	</ui:define>
+	
+	<ui:define name="rodape">
+		<ui:include src="/template/rodape.xhtml" />
+	</ui:define>
+	
+</ui:composition>

@@ -1,0 +1,98 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+         xmlns:h="http://xmlns.jcp.org/jsf/html" 
+         xmlns:f="http://xmlns.jcp.org/jsf/core" 
+         xmlns:ui="http://xmlns.jcp.org/jsf/facelets" 
+         xmlns:p="http://primefaces.org/ui" 
+         template="/template/template.xhtml">
+      
+      
+     <ui:define name="cabecalho">
+     <ui:include src="/template/cabecalho.xhtml"/>
+     
+     </ui:define>
+     
+     <ui:define name="menu_esquerdo">
+     <ui:include src="/template/menu_esquerdo.xhtml"/>
+     </ui:define>
+     
+          <ui:define name="conteudo">
+          
+           <h:form id="form">
+            <p:dataTable id="tblPessoas" var="pedido" 
+            value="#{Pag_Pedido.novaListaPedidos}" 
+            paginator="true" rows="15" emptyMessage="Nenhum registro foi encontrado!">
+
+            <f:facet name="header"> Lista de pedidos 
+            
+                                  <p>Atenção usuário ao realizar o pagamento voçê
+                                  deve inseri o código do pedido.</p>                              
+           </f:facet>
+            
+           <p:column headerText="Codigo Pedido">
+           <h:outputText value="#{pedido.codigoPe}"/>
+           </p:column>
+           
+           <p:column headerText="Numero Pedido">
+           <h:outputText value="#{pedido.numero}"/>
+           </p:column>
+           
+           <p:column headerText="valor">
+           <h:outputText value="#{pedido.valorP}"/>
+           </p:column>
+           
+           
+           
+              <p:column headerText="Clientes">
+	                <p:dataList var="end" value="#{pedido.clientes}" 
+	                	emptyMessage="Não tem cliente relacionado!" >
+	                	#{end}
+	                </p:dataList>
+	           </p:column>
+       </p:dataTable>
+       
+       <p:button value="Pagamento" outcome="/pag_pagamento.jsf" />
+       
+       
+  
+       
+       
+     </h:form>
+
+        
+       <p:dialog>
+	    
+
+     <h:form id="fEditar">
+        <p:outputPanel id="pgEditar" style="text-align:center;">
+               <p:panelGrid columns="2">
+          
+              <p:outputLabel value="Codigo pedido"/>
+               <p:inputText value="#{Pag_Pedido.pedido.codigoPe}" />
+      
+               <p:outputLabel value="Numero do Pedido"/>
+               <p:inputText value="#{Pag_Pedido.pedido.numero}"/>
+      
+               <p:outputLabel value="Valor"/>
+               <p:inputText value="#{Pag_Pedido.pedido.valorP}"/>
+      
+          
+               <f:selectItems value="#{Pag_Pedido.pedido.clientes}" 
+                var="end" itemLabel="#{end}" itemValue="#{end}"/>
+       
+          
+            
+              </p:panelGrid>
+           </p:outputPanel>
+        </h:form>
+      </p:dialog>
+   
+                  
+         
+      
+   </ui:define>
+   
+    <ui:define name="rodape">
+    <ui:include src="/template/rodape.xhtml"/>
+    </ui:define>
+    
+</ui:composition>

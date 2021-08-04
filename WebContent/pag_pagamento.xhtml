@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/template/template.xhtml">
+	
+	
+	<ui:define name="cabecalho">
+		<ui:include src="/template/cabecalho.xhtml" />
+	</ui:define>
+	
+	<ui:define name="menu_esquerdo">
+		<ui:include src="/template/menu_esquerdo.xhtml" />
+	</ui:define>
+	
+	
+	  
+
+<style>
+  .container {
+    width: 50vw;
+    height: 50vh;
+    backgound:blue;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items:center
+   
+}
+</style>
+       	          
+    <ui:define name="conteudo">
+      <div class="container">
+    
+    <f:facet name="header">
+         Efetuando o pagamento
+      </f:facet>
+  
+       
+        <h:form >
+        
+         <p:growl id="msgGlobal" showDetail="true" sticky="false" life="2000" />
+		 
+			
+        	<h:panelGrid id="grid" columns="4" cellpadding="1">
+		
+				
+				<div>
+					<h:outputLabel for="cartao" value="numero do cartao:" style="font-weight:bold" />
+					<p:inputText id="cartao" value="#{Pag_Pagamento.pagamento.cartao}"
+						required="true" label="cartao" />
+					<p:message for="cartao" />
+				</div>
+				
+				<div>
+					<h:outputLabel for="cpedido" value="codigo Pedido:" style="font-weight:bold" />
+					<p:inputText id="cpedido" value="#{Pag_Pagamento.pagamento.pedido_codigoPe}"
+						required="true" label="pedido" />
+					<p:message for=" cpedido" />
+				</div>
+				
+			
+				
+						 
+			</h:panelGrid>
+			       <div>
+					<p:commandButton value="Efetuar Pagamento"
+						actionListener="#{Pag_Pagamento.Cadastrar}"
+						icon="icon pi-check"
+						update="msgGlobal"/>	
+						
+					
+						
+					<p:commandButton value="Limpar" type="reset" />		
+				</div>
+	     </h:form> 	  		
+          
+           
+           
+    </div>  
+ </ui:define>
+  
+	<ui:define name="rodape">
+		<ui:include src="/template/rodape.xhtml" />
+	</ui:define>
+	
+</ui:composition>
